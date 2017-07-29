@@ -9,13 +9,13 @@
 /* Begin PBXBuildFile section */
 		546A6CE01F29926E00936610 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546A6CDF1F29926E00936610 /* AppDelegate.swift */; };
 		546A6CE21F29926E00936610 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546A6CE11F29926E00936610 /* ViewController.swift */; };
-		546A6CE51F29926E00936610 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 546A6CE31F29926E00936610 /* Main.storyboard */; };
 		546A6CE71F29926E00936610 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 546A6CE61F29926E00936610 /* Assets.xcassets */; };
 		546A6CEA1F29926E00936610 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 546A6CE81F29926E00936610 /* LaunchScreen.storyboard */; };
 		546A6CF51F29926E00936610 /* WSLMateBallTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546A6CF41F29926E00936610 /* WSLMateBallTests.swift */; };
 		546A6D001F29926E00936610 /* WSLMateBallUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546A6CFF1F29926E00936610 /* WSLMateBallUITests.swift */; };
 		546A6D0E1F299AE100936610 /* WSLMateBall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546A6D0D1F299AE100936610 /* WSLMateBall.swift */; };
 		546A6D101F29C4A800936610 /* WSMateBallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546A6D0F1F29C4A800936610 /* WSMateBallView.swift */; };
+		546A6D121F2AE71E00936610 /* AppDelegateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546A6D111F2AE71E00936610 /* AppDelegateWindow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +39,6 @@
 		546A6CDC1F29926E00936610 /* WSLMateBall.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WSLMateBall.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		546A6CDF1F29926E00936610 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		546A6CE11F29926E00936610 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		546A6CE41F29926E00936610 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		546A6CE61F29926E00936610 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		546A6CE91F29926E00936610 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		546A6CEB1F29926E00936610 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -51,6 +50,7 @@
 		546A6D011F29926E00936610 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		546A6D0D1F299AE100936610 /* WSLMateBall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSLMateBall.swift; sourceTree = "<group>"; };
 		546A6D0F1F29C4A800936610 /* WSMateBallView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSMateBallView.swift; sourceTree = "<group>"; };
+		546A6D111F2AE71E00936610 /* AppDelegateWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegateWindow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,10 +102,10 @@
 			isa = PBXGroup;
 			children = (
 				546A6CDF1F29926E00936610 /* AppDelegate.swift */,
+				546A6D111F2AE71E00936610 /* AppDelegateWindow.swift */,
 				546A6CE11F29926E00936610 /* ViewController.swift */,
 				546A6D0D1F299AE100936610 /* WSLMateBall.swift */,
 				546A6D0F1F29C4A800936610 /* WSMateBallView.swift */,
-				546A6CE31F29926E00936610 /* Main.storyboard */,
 				546A6CE61F29926E00936610 /* Assets.xcassets */,
 				546A6CE81F29926E00936610 /* LaunchScreen.storyboard */,
 				546A6CEB1F29926E00936610 /* Info.plist */,
@@ -240,7 +240,6 @@
 			files = (
 				546A6CEA1F29926E00936610 /* LaunchScreen.storyboard in Resources */,
 				546A6CE71F29926E00936610 /* Assets.xcassets in Resources */,
-				546A6CE51F29926E00936610 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +264,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				546A6D121F2AE71E00936610 /* AppDelegateWindow.swift in Sources */,
 				546A6CE21F29926E00936610 /* ViewController.swift in Sources */,
 				546A6D0E1F299AE100936610 /* WSLMateBall.swift in Sources */,
 				546A6D101F29C4A800936610 /* WSMateBallView.swift in Sources */,
@@ -304,14 +304,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		546A6CE31F29926E00936610 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				546A6CE41F29926E00936610 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		546A6CE81F29926E00936610 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -515,6 +507,7 @@
 				546A6D061F29926E00936610 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		546A6D071F29926E00936610 /* Build configuration list for PBXNativeTarget "WSLMateBallTests" */ = {
 			isa = XCConfigurationList;
@@ -523,6 +516,7 @@
 				546A6D091F29926E00936610 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		546A6D0A1F29926E00936610 /* Build configuration list for PBXNativeTarget "WSLMateBallUITests" */ = {
 			isa = XCConfigurationList;
@@ -531,6 +525,7 @@
 				546A6D0C1F29926E00936610 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
