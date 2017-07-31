@@ -17,7 +17,7 @@ class AppDelegateWindow: UIWindow {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        WSLMateBall.shared.updataMetaball(CGPoint(x: 100, y: 100))
+        WSLMateBall.shared.updateMetaball(touches)
         
         WSLMateBall.shared.drawMetaBall()
         self.setNeedsDisplay()

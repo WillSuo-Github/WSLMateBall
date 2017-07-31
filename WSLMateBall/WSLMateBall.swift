@@ -64,6 +64,7 @@ class WSLMateBall: UIView {
         metaBallArr.append(ballView)
         self.drawMetaBall()
         
+        self.setNeedsDisplay()
         (UIApplication.shared.keyWindow as! AppDelegateWindow).setNeedsDisplay()
     }
 
@@ -116,7 +117,7 @@ class WSLMateBall: UIView {
     }
     
 //MARK:- tapped response
-    func updateMetaball(_ touches: [UITouch]) {
+    func updateMetaball(_ touches: Set<UITouch>) {
         
         var trackedTouches = touches
         
@@ -124,7 +125,7 @@ class WSLMateBall: UIView {
             var shortestDistanceToMetaballs = CGFloat.greatestFiniteMagnitude
             var distanceToCurrentMetaball = CGFloat.greatestFiniteMagnitude
             var matchingTouch: UITouch?
-            var moveball = moveBall
+            var moveball: WSMateBallView?
             
             for currentBall in metaBallArr {
                 
@@ -146,9 +147,11 @@ class WSLMateBall: UIView {
                 }
             }
             
-            let movePoint = matchingTouch?.location(in: self)
-            moveball.position = GLKVector2Make(Float(movePoint.x), Float(movePoint.y))
-//            trackedTouches.remove(at: <#T##Int#>)
+            if let mTouch = matchingTouch, let moveB = moveball{
+                let movePoint = mTouch.location(in: self)
+                moveB.position = GLKVector2Make(Float(movePoint.x), Float(movePoint.y))
+                trackedTouches.remove(mTouch)
+            }
         }
     }
     
@@ -156,12 +159,20 @@ class WSLMateBall: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
-        WSLMateBall.shared.updateMetaball(CGPoint(x: 100, y: 100))
+        WSLMateBall.shared.updateMetaball(touches)
         
         WSLMateBall.shared.drawMetaBall()
         self.setNeedsDisplay()
     }
 
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        updateMetaball(touches)
+        
+        drawMetaBall()
+        self.setNeedsDisplay()
+    }
     
 //MARK:- other
     private func trackBorder(_ position: GLKVector2) -> GLKVector2 {

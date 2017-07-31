@@ -199,6 +199,7 @@
 				TargetAttributes = {
 					546A6CDB1F29926E00936610 = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = NT9VR9C9HY;
 						ProvisioningStyle = Automatic;
 					};
 					546A6CEF1F29926E00936610 = {
@@ -414,6 +415,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = NT9VR9C9HY;
 				INFOPLIST_FILE = WSLMateBall/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ws.WSLMateBall;
@@ -426,6 +428,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = NT9VR9C9HY;
 				INFOPLIST_FILE = WSLMateBall/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ws.WSLMateBall;
