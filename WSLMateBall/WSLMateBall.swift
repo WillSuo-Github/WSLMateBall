@@ -7,245 +7,119 @@
 //
 
 import UIKit
-import GLKit
-import CoreGraphics
 
 private let sharedInstance = WSLMateBall()
 class WSLMateBall: UIView {
-    
-    public var metaBallArr = [WSMateBallView]()
-    public var pathRef: CGPath?
-    
-    struct PositionForce {
-        var position: GLKVector2
-        var force: CGFloat
-    }
 
+    
     public class var shared: WSLMateBall {
         return sharedInstance
     }
     
-    private var minSize: CGFloat = CGFloat.greatestFiniteMagnitude
-    private let THRESHOLD: CGFloat = 0.0004
-    private let GOOIENESS: CGFloat = 2.7
-    private let MAXSTEPS = 400
-    private let RESOLUTION: CGFloat = 4.0
+//MARK:- private property
+    private var mainBall: CAShapeLayer = CAShapeLayer()
 
 //MARK:- cycle life
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        self.backgroundColor = .green
+        configSubviews()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func draw(_ rect: CGRect) {
-        
-        let context = UIGraphicsGetCurrentContext()
-        
-        context?.saveGState()
-        
-        context?.clear(rect)
-        
-        if let path = WSLMateBall.shared.pathRef {
-            context?.setLineWidth(2.0)
-            UIColor.white.setStroke()
-            UIColor.blue.setFill()
-            
-            context?.addPath(path)
-            context?.drawPath(using: .stroke)
-        }
-        context?.restoreGState()
-    }
-    
-    public func addMetaball(atPosition: GLKVector2, size: CGFloat, onView: UIView) {
-        let ballView = WSMateBallView(atPosition: atPosition, size: size, superView: onView)
-        metaBallArr.append(ballView)
-        self.drawMetaBall()
-        
-        self.setNeedsDisplay()
-        (UIApplication.shared.keyWindow as! AppDelegateWindow).setNeedsDisplay()
-    }
-
 //MARK:- layout
-    public func drawMetaBall() {
-        minSize = CGFloat.greatestFiniteMagnitude
-        
-        for ball in metaBallArr {
-            minSize = min(minSize, ball.itemSize)
-            ball.edge = trackBorder(ball.position)
-            ball.tracked = false
-        }
-        
-        var currentMateball = untrackedMetaball()
-        guard let mateball = currentMateball else {return}
-        let mutablePath = CGMutablePath()
-        if var edge = mateball.edge {
-            mutablePath.move(to: CGPoint(x: CGFloat(edge.x), y: CGFloat(edge.y)))
-            
-            var edgeSteps = 0
-            while edgeSteps < MAXSTEPS {
-                let positionForce = PositionForce(position: edge, force: RESOLUTION)
-                edge = rungeKutta2(positionForce)
-                edge = stepToBorder(edge).position
-                
-                mutablePath.addLine(to: CGPoint(x: CGFloat(edge.x), y: CGFloat(edge.y)))
-                let previousEdge = GLKVector2Make(edge.x, edge.y)
-                
-                for ball in metaBallArr {
-                    if GLKVector2Distance(ball.edge!, previousEdge) < Float(RESOLUTION * 0.5) {
-                        edge = ball.edge!
-                        currentMateball?.tracked = true
-                        
-                        if ball.tracked {
-                            currentMateball = untrackedMetaball()
-                            if currentMateball != nil {
-                                edge = (currentMateball?.edge)!
-                                mutablePath.move(to: CGPoint(x: CGFloat(edge.x), y: CGFloat(edge.y)))
-                            }
-                        }else{
-                            currentMateball = ball
-                        }
-                    }
-                }
-                edgeSteps += 1
-            }
-        }
-        
-        pathRef = mutablePath.copy()
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        mainBall.path = getMainNoramlPath()
     }
     
-//MARK:- tapped response
-    func updateMetaball(_ touches: Set<UITouch>) {
-        
-        var trackedTouches = touches
-        
-        for moveBall in metaBallArr {
-            var shortestDistanceToMetaballs = CGFloat.greatestFiniteMagnitude
-            var distanceToCurrentMetaball = CGFloat.greatestFiniteMagnitude
-            var matchingTouch: UITouch?
-            var moveball: WSMateBallView?
-            
-            for currentBall in metaBallArr {
-                
-                if trackedTouches.count > 0 {
-                    for touch in trackedTouches {
-                        
-                        let location = touch.location(in: self)
-                        let distance = GLKVector2Distance(currentBall.position, GLKVector2Make(Float(location.x), Float(location.y)))
-                        if distance < Float(distanceToCurrentMetaball) {
-                            distanceToCurrentMetaball = CGFloat(distance)
-                            matchingTouch = touch
-                        }
-                    }
-                    
-                    if distanceToCurrentMetaball < shortestDistanceToMetaballs {
-                        shortestDistanceToMetaballs = distanceToCurrentMetaball
-                        moveball = currentBall
-                    }
-                }
-            }
-            
-            if let mTouch = matchingTouch, let moveB = moveball{
-                let movePoint = mTouch.location(in: self)
-                moveB.position = GLKVector2Make(Float(movePoint.x), Float(movePoint.y))
-                trackedTouches.remove(mTouch)
-            }
-        }
+    private func configSubviews() {
+        mainBall.path = getMainNoramlPath()
+        mainBall.fillColor = UIColor.red.cgColor
+        self.layer.addSublayer(mainBall)
     }
     
+    private func getMainNoramlPath() -> CGPath {
+        return UIBezierPath(arcCenter: CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2), radius: self.bounds.size.width / 2, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true).cgPath
+    }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
+    private func getMainLargePath() -> CGPath {
+        return UIBezierPath(arcCenter: CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2), radius: self.bounds.size.width / 2 + 10, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true).cgPath
+    }
+    
+    private func getMainBulgePath() -> CGPath {
+        let path = UIBezierPath()
+        path.addArc(withCenter: CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2), radius: self.bounds.size.width / 2 , startAngle: 0, endAngle: CGFloat.pi, clockwise: true)
         
-        WSLMateBall.shared.updateMetaball(touches)
+//        path.move(to: CGPoint(x: 0, y: self.bounds.size.height / 2))
+//        path.addLine(to: CGPoint(x: self.bounds.size.width, y: self.bounds.size.height / 2))
+//        path.addQuadCurve(to: CGPoint(x: self.bounds.size.width + 2, y: self.bounds.size.height / 2), controlPoint: CGPoint(x: self.bounds.size.width / 2, y:  -50))
+//        path.close()
+        path.addClip()
         
-        WSLMateBall.shared.drawMetaBall()
-        self.setNeedsDisplay()
+        return path.cgPath
     }
 
+//MARK:- start bubble
+    public func bubble() {
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        animationLarger()
+    }
+    
+
+    private func animationLarger() {
         
-        updateMetaball(touches)
+        let duration: TimeInterval = 0.1
+        mainBallDoAnimation(duration: duration, fromPath: getMainNoramlPath(), toPath: getMainLargePath())
         
-        drawMetaBall()
-        self.setNeedsDisplay()
-    }
-    
-//MARK:- other
-    private func trackBorder(_ position: GLKVector2) -> GLKVector2 {
-        var positionForce: PositionForce = PositionForce(position:GLKVector2Make(position.x, position.y + 1), force:CGFloat.greatestFiniteMagnitude)
-        
-        var reps = 0
-        var previousForce:CGFloat = 0.0
-        while fabsf(Float(positionForce.force - previousForce)) > Float.ulpOfOne && positionForce.force > THRESHOLD {
-            previousForce = positionForce.force
-            positionForce = stepToBorder(positionForce.position)
-            reps += 1
-        }
-        return positionForce.position
-    }
-    
-    private func stepToBorder(_ position: GLKVector2) -> PositionForce {
-        let force = calculateForce(position)
-        let normal: GLKVector2 = calculateNormal(position)
-        let stepSize = powf((Float(minSize / THRESHOLD)), Float(1.0 / GOOIENESS)) - powf(Float(minSize / force), Float(1.0 / GOOIENESS)) + Float.ulpOfOne
-        let positionForce = PositionForce(position: GLKVector2Add(position, GLKVector2MultiplyScalar(normal, stepSize)), force: force)
-        return positionForce
-    }
-    
-    private func calculateForce(_ position: GLKVector2) -> CGFloat {
-        var force: CGFloat = 0
-        for ball in metaBallArr {
-            let div: CGFloat = CGFloat(powf(GLKVector2Distance(ball.position, position), Float(GOOIENESS)))
-            if div != 0.0 {
-                force += ball.itemSize / div
-            }else{
-                force += 100000
-            }
-        }
-        return force
-    }
-    
-    private func calculateNormal(_ position: GLKVector2) -> GLKVector2 {
-        var normal = GLKVector2Make(0, 0)
-        for ball in metaBallArr {
-            let radius = GLKVector2Subtract(ball.position, position)
-            let length = GLKVector2Length(radius)
-            if length != 0 {
-                let multiply: Float = Float((-1.0) * GOOIENESS * ball.itemSize) / powf(length, Float(2.0 + GOOIENESS))
-                normal = GLKVector2Add(normal, GLKVector2MultiplyScalar(radius, multiply))
-            }
-        }
-        return GLKVector2Normalize(normal)
-    }
-    
-    private func untrackedMetaball() -> WSMateBallView? {
-        var index = NSNotFound
-        for (idx, ball) in metaBallArr.enumerated() {
-            if !ball.tracked {
-                index = idx
-                break
-            }
-        }
-        
-        if index != NSNotFound {
-            return metaBallArr[index]
-        }else{
-            return nil
+        delay(duration) { 
+            self.animationSmall()
         }
     }
     
-    private func rungeKutta2(_ positionForce: PositionForce) -> GLKVector2 {
-        let normal = calculateNormal(positionForce.position)
-        let t1 = GLKVector2Make(Float(CGFloat(normal.y) * RESOLUTION * -0.5), Float(CGFloat(normal.x) * RESOLUTION * 0.5))
+    private func animationSmall() {
+        let duration: TimeInterval = 0.2
+        mainBallDoAnimation(duration: duration, fromPath: nil, toPath: getMainNoramlPath())
         
-        let normal2 = calculateNormal(GLKVector2Add(positionForce.position, t1))
-        let t2 = GLKVector2Make(Float(CGFloat(normal2.y) * RESOLUTION * -1), Float(CGFloat(normal2.x) * RESOLUTION))
+        delay(duration) { 
+            self.animationBulge()
+        }
+    }
+    
+    private func animationBulge() {
+        let duration: TimeInterval = 0.2
+//        let animation = CABasicAnimation(keyPath: "path")
+//        animation.toValue = getMainBulgePath()
+//        animation.duration = duration
+//        animation.isRemovedOnCompletion = false
+//        animation.fillMode = kCAFillModeForwards
+//        mainBall.add(animation, forKey: "small")
         
-        return GLKVector2Add(positionForce.position, t2)
+        mainBallDoAnimation(duration: duration, fromPath: nil, toPath: getMainBulgePath())
+    }
+    
+    
+    private func mainBallDoAnimation(duration: TimeInterval, fromPath: CGPath?, toPath: CGPath) {
+        let animation = CASpringAnimation(keyPath: "path")
+        if let from = fromPath {
+            animation.fromValue = from
+        }
+        animation.toValue = toPath
+        animation.duration = duration
+        animation.isRemovedOnCompletion = false
+        animation.fillMode = kCAFillModeForwards
+        mainBall.add(animation, forKey: "animation")
+    }
+    
+//MARK:- other 
+    private func delay(_ time: TimeInterval, execute:@escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + time) { 
+            execute()
+        }
     }
 }
 

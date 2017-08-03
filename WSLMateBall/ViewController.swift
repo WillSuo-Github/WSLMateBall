@@ -13,25 +13,28 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .red
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        view.backgroundColor = .white
         
         let ballView = WSLMateBall.shared
-        ballView.frame = self.view.bounds
+        ballView.frame = CGRect(x: 100, y: 100, width: 50, height: 50)
         self.view.addSubview(ballView)
-        WSLMateBall.shared.addMetaball(atPosition: GLKVector2Make(100, 100), size: 40, onView: UIApplication.shared.keyWindow!)
         
-        WSLMateBall.shared.addMetaball(atPosition: GLKVector2Make(200, 100), size: 40, onView: UIApplication.shared.keyWindow!)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
         
+        let btn = UIButton(type: .custom)
+        btn.frame = CGRect(x: 200, y: 200, width: 44, height: 44)
+        btn.setTitle("start", for: .normal)
+        btn.setTitleColor(.blue, for: .normal)
+        btn.addTarget(self, action: #selector(startButtonDidTapped), for: .touchUpInside)
+        self.view.addSubview(btn)
     }
+    
+    
+//MARK:- tapped response
+    @objc private func startButtonDidTapped() {
+        
+        WSLMateBall.shared.bubble()
+    }
+    
 
 
 }

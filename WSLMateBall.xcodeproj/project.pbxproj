@@ -15,7 +15,6 @@
 		546A6D001F29926E00936610 /* WSLMateBallUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546A6CFF1F29926E00936610 /* WSLMateBallUITests.swift */; };
 		546A6D0E1F299AE100936610 /* WSLMateBall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546A6D0D1F299AE100936610 /* WSLMateBall.swift */; };
 		546A6D101F29C4A800936610 /* WSMateBallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546A6D0F1F29C4A800936610 /* WSMateBallView.swift */; };
-		546A6D121F2AE71E00936610 /* AppDelegateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546A6D111F2AE71E00936610 /* AppDelegateWindow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +49,6 @@
 		546A6D011F29926E00936610 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		546A6D0D1F299AE100936610 /* WSLMateBall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSLMateBall.swift; sourceTree = "<group>"; };
 		546A6D0F1F29C4A800936610 /* WSMateBallView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSMateBallView.swift; sourceTree = "<group>"; };
-		546A6D111F2AE71E00936610 /* AppDelegateWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegateWindow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				546A6CDF1F29926E00936610 /* AppDelegate.swift */,
-				546A6D111F2AE71E00936610 /* AppDelegateWindow.swift */,
 				546A6CE11F29926E00936610 /* ViewController.swift */,
 				546A6D0D1F299AE100936610 /* WSLMateBall.swift */,
 				546A6D0F1F29C4A800936610 /* WSMateBallView.swift */,
@@ -265,7 +262,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				546A6D121F2AE71E00936610 /* AppDelegateWindow.swift in Sources */,
 				546A6CE21F29926E00936610 /* ViewController.swift in Sources */,
 				546A6D0E1F299AE100936610 /* WSLMateBall.swift in Sources */,
 				546A6D101F29C4A800936610 /* WSMateBallView.swift in Sources */,
