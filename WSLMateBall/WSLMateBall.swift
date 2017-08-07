@@ -51,18 +51,15 @@ class WSLMateBall: UIView {
         return UIBezierPath(arcCenter: CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2), radius: self.bounds.size.width / 2 + 10, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true).cgPath
     }
     
-    private func getMainBulgePath() -> CGPath {
-        let path = UIBezierPath()
-        path.addArc(withCenter: CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2), radius: self.bounds.size.width / 2 , startAngle: 0, endAngle: CGFloat.pi, clockwise: true)
-        
-//        path.move(to: CGPoint(x: 0, y: self.bounds.size.height / 2))
-//        path.addLine(to: CGPoint(x: self.bounds.size.width, y: self.bounds.size.height / 2))
-//        path.addQuadCurve(to: CGPoint(x: self.bounds.size.width + 2, y: self.bounds.size.height / 2), controlPoint: CGPoint(x: self.bounds.size.width / 2, y:  -50))
+//    private func getMainBulgePath() -> CGPath {
+//        let path = UIBezierPath()
+//        
+//        path.addArc(withCenter: CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2), radius: self.bounds.size.width / 2, startAngle: 0, endAngle: CGFloat.pi, clockwise: true)
+//        
+//        path.addQuadCurve(to: CGPoint(x: self.bounds.size.width, y: self.bounds.size.height / 2), controlPoint: CGPoint(x: self.bounds.size.width / 2, y:  -30))
 //        path.close()
-        path.addClip()
-        
-        return path.cgPath
-    }
+//        return path.cgPath
+//    }
 
 //MARK:- start bubble
     public func bubble() {
@@ -91,15 +88,15 @@ class WSLMateBall: UIView {
     }
     
     private func animationBulge() {
+        mainBall.anchorPoint = CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2);
         let duration: TimeInterval = 0.2
-//        let animation = CABasicAnimation(keyPath: "path")
+        let animation = CABasicAnimation(keyPath: "path")
 //        animation.toValue = getMainBulgePath()
-//        animation.duration = duration
-//        animation.isRemovedOnCompletion = false
-//        animation.fillMode = kCAFillModeForwards
-//        mainBall.add(animation, forKey: "small")
-        
-        mainBallDoAnimation(duration: duration, fromPath: nil, toPath: getMainBulgePath())
+        animation.duration = duration
+        animation.isRemovedOnCompletion = false
+        animation.fillMode = kCAFillModeForwards
+        mainBall.add(animation, forKey: "small")
+//        mainBallDoAnimation(duration: duration, fromPath: nil, toPath: getMainBulgePath())
     }
     
     
