@@ -21,11 +21,18 @@ class ViewController: UIViewController {
         
         
         let btn = UIButton(type: .custom)
-        btn.frame = CGRect(x: 200, y: 200, width: 44, height: 44)
+        btn.frame = CGRect(x: 150, y: 200, width: 44, height: 44)
         btn.setTitle("start", for: .normal)
         btn.setTitleColor(.blue, for: .normal)
         btn.addTarget(self, action: #selector(startButtonDidTapped), for: .touchUpInside)
         self.view.addSubview(btn)
+        
+        let endBtn = UIButton(type: .custom)
+        endBtn.frame = CGRect(x: 260, y: 200, width: 44, height: 44)
+        endBtn.setTitle("end", for: .normal)
+        endBtn.setTitleColor(.blue, for: .normal)
+        endBtn.addTarget(self, action: #selector(endButtonDidTapped), for: .touchUpInside)
+        self.view.addSubview(endBtn)
     }
     
     
@@ -33,6 +40,11 @@ class ViewController: UIViewController {
     @objc private func startButtonDidTapped() {
         
         WSLMateBall.shared.bubble()
+    }
+    
+    @objc private func endButtonDidTapped() {
+        
+        
     }
     
 
