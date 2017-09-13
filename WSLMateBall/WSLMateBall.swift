@@ -7,10 +7,13 @@
 //
 
 import UIKit
+struct WSLCustomConfig {
+    var smallWH: CGFloat = 10.0
+    var smallColor: UIColor = .purple
+}
 
 private let sharedInstance = WSLMateBall()
 class WSLMateBall: UIView {
-
     
     public class var shared: WSLMateBall {
         return sharedInstance
@@ -19,6 +22,7 @@ class WSLMateBall: UIView {
 //MARK:- private property
     private var mainBall: CAShapeLayer = CAShapeLayer()
     private var smallBalls: [UIView] = [UIView]()
+    private var config: WSLCustomConfig = WSLCustomConfig()
     
     var displayLink: CADisplayLink?
     
@@ -46,17 +50,21 @@ class WSLMateBall: UIView {
         self.layer.addSublayer(mainBall)
     }
     
-    private func addSmallBall() -> UIView {
+    private func addSmallBall() -> (UIView, UIView) {
         let view = UIView()
-        let layerWH: CGFloat = 10.0
+        let layerWH: CGFloat = config.smallWH
         view.frame = CGRect(x: self.bounds.size.width / 2 - layerWH / 2, y: self.bounds.size.height / 2 - layerWH / 2, width: layerWH, height: layerWH)
-        view.backgroundColor = UIColor.purple
+        view.backgroundColor = config.smallColor
         view.layer.cornerRadius = layerWH / 2
         view.layer.masksToBounds = true
-//        self.layer.insertSublayer(layer, at: 9)
-        self.addSubview(view)
+        let superView = UIView()
+        self.insertSubview(superView, at: 0)
+        superView.frame = self.bounds
+        superView.center = CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2)
+        self.addSubview(superView)
+        superView.addSubview(view)
         smallBalls.append(view)
-        return view
+        return (superView, view)
     }
     
     private func getMainNoramlPath() -> CGPath {
@@ -73,21 +81,17 @@ class WSLMateBall: UIView {
             print(layer.frame)
         }
     }
-    
 
 //MARK:- start bubble
     public func bubble() {
-    
         animationLarger()
     }
     
-
     private func animationLarger() {
-        
         let duration: TimeInterval = 0.1
         mainBallDoAnimation(duration: duration, fromPath: getMainNoramlPath(), toPath: getMainLargePath())
         
-        delay(duration) { 
+        delay(duration) {
             self.animationSmall()
         }
     }
@@ -102,25 +106,34 @@ class WSLMateBall: UIView {
     }
     
     private func animationSmallBall() {
-        let smallBall = addSmallBall()
-//        startDisplay()
+        let (superView, smallBall) = addSmallBall()
 
         let duration = 1.0
-        UIView.animate(withDuration: duration) {
-            smallBall.transform = CGAffineTransform(translationX: 0, y: -self.bounds.size.height / 2 - 8)
-        }
         
-        delay(duration) { 
-            self.animationRotation(smallBall)
+        UIView.animate(withDuration: duration, animations: { 
+            smallBall.transform = CGAffineTransform(translationX: 0, y: -self.bounds.size.height / 2 - 8)
+        }) { (isComplete) in
+            self.animationRotation(superView)
         }
     }
     
-    
     private func animationRotation(_ view: UIView) {
-        UIView.animate(withDuration: 1) { 
-            view.layer.anchorPoint = CGPoint(x: 0, y: 0)
-            view.transform = CGAffineTransform(rotationAngle: -(CGFloat)(Double.pi))
-        }
+        let rotateTimeFunction = [CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)]
+        
+        var rotateValues = [NSNumber(value: 0)]
+        let value = rotateValues.last!.floatValue + Float.pi * 2
+        rotateValues.append(NSNumber(value: value))
+
+        let rotateAnim = CAKeyframeAnimation(keyPath: "transform.rotation.z")
+        rotateAnim.keyTimes = [0.0, 1.0]
+        rotateAnim.duration = 1
+        rotateAnim.repeatCount = HUGE;
+        rotateAnim.isRemovedOnCompletion = false;
+        rotateAnim.fillMode = kCAFillModeForwards;
+        rotateAnim.values = rotateValues
+        rotateAnim.timingFunctions = rotateTimeFunction
+        
+        view.layer.add(rotateAnim, forKey: "rotate")
     }
     
     
@@ -142,17 +155,5 @@ class WSLMateBall: UIView {
             execute()
         }
     }
-    
-    private func startDisplay() {
-        let disp = displayLink ?? CADisplayLink(target: self, selector: #selector(displayAction(_:)))
-        disp.add(to: RunLoop.current, forMode: .defaultRunLoopMode)
-        displayLink = disp
-    }
-    
-    private func endDisplay() {
-        displayLink?.invalidate()
-    }
-    
-
 }
 
