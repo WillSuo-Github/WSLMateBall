@@ -8,7 +8,7 @@
 
 import UIKit
 struct WSLCustomConfig {
-    var smallWH: CGFloat = 10.0
+    var smallWH: CGFloat = 8.0
     var smallColor: UIColor = .purple
 }
 
@@ -83,8 +83,13 @@ class WSLMateBall: UIView {
     }
 
 //MARK:- start bubble
-    public func bubble() {
+    public func addBubble() {
         animationLarger()
+    }
+    
+    public func reduceBubble() {
+        smallBalls.last?.removeFromSuperview()
+        smallBalls.removeLast()
     }
     
     private func animationLarger() {
@@ -111,7 +116,7 @@ class WSLMateBall: UIView {
         let duration = 1.0
         
         UIView.animate(withDuration: duration, animations: { 
-            smallBall.transform = CGAffineTransform(translationX: 0, y: -self.bounds.size.height / 2 - 8)
+            smallBall.transform = CGAffineTransform(translationX: 0, y: -self.bounds.size.height / 2 - 6)
         }) { (isComplete) in
             self.animationRotation(superView)
         }

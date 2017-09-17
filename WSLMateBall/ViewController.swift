@@ -39,12 +39,12 @@ class ViewController: UIViewController {
 //MARK:- tapped response
     @objc private func startButtonDidTapped() {
         
-        WSLMateBall.shared.bubble()
+        WSLMateBall.shared.addBubble()
     }
     
     @objc private func endButtonDidTapped() {
         
-        
+        WSLMateBall.shared.reduceBubble()
     }
     
 
